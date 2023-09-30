@@ -4,3 +4,4 @@ fastapi[all]
 python-multipart
 requests
 xades
+cryptography
