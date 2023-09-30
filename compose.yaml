@@ -1,0 +1,13 @@
+services:
+  #backend/asym-crypto:
+  #  build:
+  #    context: ./backend/asymm-crypto
+  keystore:
+    build: 
+      context: ./backend/keystore
+      tags:
+        - "hackyeah-keystore:latest"
+    volumes:
+      - hackyeah-keystore:/data
+volumes:
+  hackyeah-keystore:
