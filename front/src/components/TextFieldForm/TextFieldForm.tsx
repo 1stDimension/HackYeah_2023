@@ -1,4 +1,4 @@
-import { FormHelperText, Input, InputLabel } from "@mui/material";
+import { FormGroup, FormHelperText, Input, InputLabel } from "@mui/material";
 import { ITextFieldFormProps } from "./models";
 
 export const TextFieldForm = ({
@@ -8,7 +8,7 @@ export const TextFieldForm = ({
   value,
   helperLabel,
 }: ITextFieldFormProps) => (
-  <>
+  <FormGroup sx={{ my: 1 }}>
     <InputLabel htmlFor={`tff-${name}`}>{inputLabel}</InputLabel>
     <Input
       name={name}
@@ -20,5 +20,5 @@ export const TextFieldForm = ({
     {helperLabel && (
       <FormHelperText id={`helper=${name}`}>{helperLabel}</FormHelperText>
     )}
-  </>
+  </FormGroup>
 );

@@ -6,16 +6,24 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { IChooseActionProps } from "./models";
 
-export const ChooseAction = ({ keys, label }: IChooseActionProps) => {
+export const ChooseAction = ({
+  name,
+  handleOptionChange,
+  value,
+  keys,
+  label,
+}: IChooseActionProps) => {
   //   const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
 
   return (
     <FormControl sx={{ display: "block" }}>
       <FormLabel id="demo-row-radio-buttons-group-label">{label}</FormLabel>
       <RadioGroup
+        name={name}
+        onChange={handleOptionChange}
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
+        value={value}
       >
         {keys.map((key, index) => (
           <FormControlLabel

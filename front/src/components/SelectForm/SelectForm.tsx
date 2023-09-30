@@ -1,16 +1,19 @@
-import { InputLabel, MenuItem, Select } from "@mui/material";
+import { FormGroup, InputLabel, MenuItem, Select } from "@mui/material";
 import { ISelectFormProps } from "./models";
 
 export const SelectForm = ({
+  inputLabel,
   name,
   options,
   handleChange,
   value,
   helperLabel,
 }: ISelectFormProps) => (
-  <>
+  <FormGroup sx={{ my: 1 }}>
+    <InputLabel id={`select-label-${inputLabel}`}>{inputLabel}</InputLabel>
     <Select
-      // id="demo-simple-select"
+      labelId={`select-label-${inputLabel}`}
+      id={`select-${inputLabel}`}
       name={name}
       value={value}
       label="Age"
@@ -25,5 +28,5 @@ export const SelectForm = ({
     {/* {helperLabel && (
       <FormHelperText id={`helper=${name}`}>{helperLabel}</FormHelperText>
     )} */}
-  </>
+  </FormGroup>
 );

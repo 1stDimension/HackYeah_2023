@@ -2,7 +2,12 @@ import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import { IChooseKeyProps } from "./models";
 
-export const ChooseKey = ({ keys }: IChooseKeyProps) => {
+export const ChooseKey = ({
+  name,
+  handleOptionChange,
+  value,
+  keys,
+}: IChooseKeyProps) => {
   return (
     <FormControl sx={{ display: "block" }}>
       {keys.map((key) => (

@@ -9,9 +9,16 @@ import { useState } from "react";
 
 const GenerateKeys = () => {
   const options = { RSA: [2048, 4096], ECDSA: [512], AES: [128] };
-  const [formData, setFormData] = useState({
+
+  type formDataType = {
+    keyName: string;
+    alghoritmType: keyof typeof options;
+    keyLength: number;
+  };
+
+  const [formData, setFormData] = useState<formDataType>({
     keyName: "",
-    alghoritmType: "",
+    alghoritmType: Object.keys(options)[0] as keyof typeof options,
     keyLength: 0,
   });
 
@@ -37,6 +44,7 @@ const GenerateKeys = () => {
           helperLabel="Wprowadź nazwę klucza generowanego do key_store"
         />
         <SelectForm
+          inputLabel="asdasd"
           name="alghoritmType"
           options={Object.keys(options)}
           handleChange={handleInputChange}
@@ -44,14 +52,13 @@ const GenerateKeys = () => {
         />
         {Object.keys(options).includes(formData.alghoritmType) && (
           <SelectForm
+            inputLabel="dupa dupa"
             name="keyLength"
-            // @ts-expect-error - TODO: to place handler that check types
             options={options[formData.alghoritmType]}
             handleChange={handleInputChange}
             value={formData.keyLength}
           />
         )}
-
         <FormGroup>
           <Button variant="contained" color="primary" type="submit">
             Submit

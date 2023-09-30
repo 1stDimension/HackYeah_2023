@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import React from "react";
+import { IChooseFileProps } from "./models";
 
 const MuiFileInput = dynamic(
   () => import("mui-file-input").then((mod) => mod.MuiFileInput),
@@ -9,18 +10,17 @@ const MuiFileInput = dynamic(
   }
 );
 
-export const ChooseFile = () => {
-  const [file, setFile] = React.useState(null);
-
-  const handleChange = (newFile: any) => {
-    setFile(newFile);
-  };
-
-  return (
-    <MuiFileInput
-      value={file}
-      onChange={handleChange}
-      sx={{ display: "block" }}
-    />
-  );
-};
+export const ChooseFile = ({
+  name,
+  handleFileInput,
+  value,
+  label,
+}: IChooseFileProps) => (
+  <MuiFileInput
+    name={name}
+    value={value}
+    // TODO: work on types
+    onChange={handleFileInput as any}
+    sx={{ display: "block" }}
+  />
+);
