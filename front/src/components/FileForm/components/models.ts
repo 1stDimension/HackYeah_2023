@@ -4,12 +4,15 @@ export interface IChooseActionProps {
   value: string;
   keys: string[];
   label: string;
+  errorMessage?: string;
 }
 export interface IChooseFileProps {
   name: string;
   handleFileInput: (file: File) => void;
   value?: File;
   label?: string;
+  errorMessage?: string;
+  fullWidth?: boolean;
 }
 export interface IChooseKeyProps {
   name: string;

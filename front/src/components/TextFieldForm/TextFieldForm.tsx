@@ -1,5 +1,6 @@
-import { FormGroup, FormHelperText, Input, InputLabel } from "@mui/material";
+import { Box, FormHelperText, Input, InputLabel } from "@mui/material";
 import { ITextFieldFormProps } from "./models";
+import { ErrorMessage } from "../ErrorMessage";
 
 export const TextFieldForm = ({
   name,
@@ -7,8 +8,10 @@ export const TextFieldForm = ({
   handleInputChange,
   value,
   helperLabel,
+  fullWidth,
+  errorMessage,
 }: ITextFieldFormProps) => (
-  <FormGroup sx={{ my: 1 }}>
+  <Box sx={{ my: 2 }}>
     <InputLabel htmlFor={`tff-${name}`}>{inputLabel}</InputLabel>
     <Input
       name={name}
@@ -16,9 +19,11 @@ export const TextFieldForm = ({
       onChange={handleInputChange}
       id={`tff-${name}`}
       aria-describedby={`helper=${name}`}
+      fullWidth
     />
     {helperLabel && (
       <FormHelperText id={`helper=${name}`}>{helperLabel}</FormHelperText>
     )}
-  </FormGroup>
+    {errorMessage && <ErrorMessage message={errorMessage} />}
+  </Box>
 );

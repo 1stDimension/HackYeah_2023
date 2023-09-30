@@ -4,4 +4,6 @@ export interface ITextFieldFormProps {
   handleInputChange: (event: any) => void;
   value: string;
   helperLabel?: string;
+  errorMessage?: string;
+  fullWidth?: boolean;
 }

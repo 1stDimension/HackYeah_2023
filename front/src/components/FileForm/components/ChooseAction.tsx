@@ -2,9 +2,10 @@ import * as React from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { IChooseActionProps } from "./models";
+import { Box } from "@mui/material";
+import { ErrorMessage } from "@/components/ErrorMessage";
 
 export const ChooseAction = ({
   name,
@@ -12,11 +13,12 @@ export const ChooseAction = ({
   value,
   keys,
   label,
+  errorMessage,
 }: IChooseActionProps) => {
   //   const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
 
   return (
-    <FormControl sx={{ display: "block" }}>
+    <Box sx={{ width: "100%", position: "relative" }}>
       <FormLabel id="demo-row-radio-buttons-group-label">{label}</FormLabel>
       <RadioGroup
         name={name}
@@ -34,6 +36,7 @@ export const ChooseAction = ({
           />
         ))}
       </RadioGroup>
-    </FormControl>
+      <ErrorMessage message={errorMessage} />
+    </Box>
   );
 };

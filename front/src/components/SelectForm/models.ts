@@ -5,4 +5,6 @@ export interface ISelectFormProps {
   handleChange: (event: any) => void;
   value: string | number;
   helperLabel?: string;
+  errorMessage?: string;
+  fullWidth?: boolean;
 }

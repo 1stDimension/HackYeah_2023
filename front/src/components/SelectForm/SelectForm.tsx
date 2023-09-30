@@ -1,5 +1,6 @@
-import { FormGroup, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { ISelectFormProps } from "./models";
+import { ErrorMessage } from "../ErrorMessage";
 
 export const SelectForm = ({
   inputLabel,
@@ -8,8 +9,10 @@ export const SelectForm = ({
   handleChange,
   value,
   helperLabel,
+  fullWidth,
+  errorMessage,
 }: ISelectFormProps) => (
-  <FormGroup sx={{ my: 1 }}>
+  <Box sx={{ my: 2, position: "relative" }}>
     <InputLabel id={`select-label-${inputLabel}`}>{inputLabel}</InputLabel>
     <Select
       labelId={`select-label-${inputLabel}`}
@@ -18,6 +21,8 @@ export const SelectForm = ({
       value={value}
       label="Age"
       onChange={handleChange}
+      fullWidth={fullWidth}
+      // error
     >
       {options.map((option, index) => (
         <MenuItem key={name + index} value={option}>
@@ -25,8 +30,9 @@ export const SelectForm = ({
         </MenuItem>
       ))}
     </Select>
+    <ErrorMessage message={errorMessage} />
     {/* {helperLabel && (
       <FormHelperText id={`helper=${name}`}>{helperLabel}</FormHelperText>
     )} */}
-  </FormGroup>
+  </Box>
 );

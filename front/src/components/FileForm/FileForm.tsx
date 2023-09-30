@@ -1,20 +1,41 @@
-import { Button, Container, FormControl, FormGroup } from "@mui/material";
+import { Button, FormControl, FormGroup } from "@mui/material";
 import { ChooseAction } from "./components/ChooseAction";
 import { ChooseFile } from "./components/ChooseFile";
-import { ChooseKey } from "./components/ChooseKey";
 import { useState } from "react";
 import { SelectForm } from "../SelectForm";
 
 export const FileForm = () => {
   const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
-  const cryptoKeys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
+  // TODO - get those from server
+  const cryptoKeys = [
+    "aaa",
+    "Szyfruj",
+    "Deszyfruj",
+    "Podpisz",
+    "Zweryfikuj podpis",
+  ];
 
   type formDataType = {
     actionType: string;
     keyType: string;
     file?: File;
   };
+  type formErrorsType = {
+    actionType: boolean;
+    keyType: boolean;
+    file: boolean;
+  };
 
+  const errorsMessages = {
+    actionType: "Proszę wybrać metodę",
+    keyType: "Proszę wybrać klucz z dostępnych w key_store",
+    file: "Proszę załączyć poprawny plik",
+  };
+  const [errors, setErrors] = useState<formErrorsType>({
+    actionType: false,
+    keyType: false,
+    file: false,
+  });
   const [formData, setFormData] = useState<formDataType>({
     actionType: "",
     keyType: "",
@@ -32,18 +53,32 @@ export const FileForm = () => {
   // TODO: create dynamic <T> event type
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log(formData);
+    const tmpError = errors;
+    Object.entries(formData).forEach((entry) => {
+      const [name] = entry;
+      // @ts-ignore
+      if (!formData[name]) tmpError[name] = true;
+      // @ts-ignore
+      else tmpError[name] = false;
+    });
+    setErrors(tmpError);
+
+    if (Object.entries(errors).some((error) => error[0])) return;
+
+    // API
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {/* <Container maxWidth="md" sx={{ mt: 10 }}> */}
-      <FormControl>
+      <FormControl fullWidth>
         <FormGroup>
           <ChooseFile
             handleFileInput={handleFileInput}
             name="file"
             value={formData.file}
+            fullWidth
+            errorMessage={errors.file ? errorsMessages.file : undefined}
           />
           <ChooseAction
             handleOptionChange={handleInputChange}
@@ -51,18 +86,23 @@ export const FileForm = () => {
             keys={keys}
             value={formData.actionType}
             label="Wybierz metodę"
+            errorMessage={
+              errors.actionType ? errorsMessages.actionType : undefined
+            }
           />
           <SelectForm
-            inputLabel="Wybierz swj klucz z key_store"
+            inputLabel="Wybierz swój klucz z key_store"
             handleChange={handleInputChange}
             name="keyType"
             options={cryptoKeys}
             value={formData.keyType}
+            fullWidth
+            errorMessage={errors.keyType ? errorsMessages.keyType : undefined}
           />
         </FormGroup>
         <FormGroup>
           <Button variant="contained" color="primary" type="submit">
-            Submit
+            {formData.actionType || "Wykonaj"}
           </Button>
         </FormGroup>
       </FormControl>

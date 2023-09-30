@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
 import React from "react";
 import { IChooseFileProps } from "./models";
+import { Box, Typography } from "@mui/material";
+import { ErrorMessage } from "@/components/ErrorMessage";
 
 const MuiFileInput = dynamic(
   () => import("mui-file-input").then((mod) => mod.MuiFileInput),
@@ -15,12 +17,18 @@ export const ChooseFile = ({
   handleFileInput,
   value,
   label,
+  fullWidth,
+  errorMessage,
 }: IChooseFileProps) => (
-  <MuiFileInput
-    name={name}
-    value={value}
-    // TODO: work on types
-    onChange={handleFileInput as any}
-    sx={{ display: "block" }}
-  />
+  <Box sx={{ display: "block", position: "relative", my: 2 }}>
+    <MuiFileInput
+      name={name}
+      value={value}
+      fullWidth={fullWidth}
+      // TODO: work on types
+      onChange={handleFileInput as any}
+      error={!!errorMessage}
+    />
+    <ErrorMessage message={errorMessage} />
+  </Box>
 );
