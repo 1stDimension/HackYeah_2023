@@ -15,7 +15,7 @@ public class Program
 
         var config = new ConfigurationBuilder()
             .AddConfiguration(builder.Configuration)
-            .AddEnvironmentVariables("HACKYEAH")
+            .AddEnvironmentVariables("HACKYEAH:")
             .AddCommandLine(args)
             .Build();
 
