@@ -38,7 +38,8 @@ public sealed class KeystoreContext : DbContext
     {
         modelBuilder.Entity<DbCryptoKeyMaterial>(e =>
         {
-            e.ToTable("keys");
+            e.ToTable("keys")
+                .Ignore(m => m.Certificates);
 
             e.Property(m => m.Id)
                 .IsRequired()
@@ -59,7 +60,7 @@ public sealed class KeystoreContext : DbContext
                 .HasColumnName("size");
 
             e.Property(m => m.PrivateKey)
-                .IsRequired()
+                .HasDefaultValue(null)
                 .HasColumnName("priv");
 
             e.Property(m => m.PublicKey)
@@ -73,7 +74,6 @@ public sealed class KeystoreContext : DbContext
                 .HasName("ukey_key_name");
 
             e.HasIndex(m => m.Name)
-                .IsUnique()
                 .HasDatabaseName("ix_key_name");
 
             e.HasIndex(m => m.Type)
@@ -81,6 +81,51 @@ public sealed class KeystoreContext : DbContext
 
             e.HasIndex(m => m.Size)
                 .HasDatabaseName("ix_key_size");
+        });
+
+        modelBuilder.Entity<DbCertificate>(e =>
+        {
+            e.ToTable("certificates")
+                .Ignore(m => m.KeyPair);
+
+            e.Property(m => m.Id)
+                .IsRequired()
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            e.Property(m => m.CommonName)
+                .IsRequired()
+                .HasColumnName("cn");
+
+            e.Property(m => m.Thumbprint)
+                .IsRequired()
+                .HasColumnName("thumbprint");
+
+            e.Property(m => m.Data)
+                .IsRequired()
+                .HasColumnName("data");
+
+            e.Property(m => m.KeyPairId)
+                .IsRequired()
+                .HasColumnName("keypair");
+
+            e.HasKey(m => m.Id)
+                .HasName("pkey_certiifcates_id");
+
+            e.HasAlternateKey(m => m.Thumbprint)
+                .HasName("ukey_certificates_thumbprint");
+
+            e.HasIndex(m => m.CommonName)
+                .HasDatabaseName("ix_certificates_cn");
+
+            e.HasIndex(m => m.KeyPairId)
+                .HasDatabaseName("ix_certificates_keypair");
+
+            e.HasOne(m => m.KeyPair)
+                .WithMany(m => m.Certificates)
+                .HasForeignKey(m => m.KeyPairId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fkey_certificates_keypair");
         });
     }
 }

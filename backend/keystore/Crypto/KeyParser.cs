@@ -85,8 +85,15 @@ public static class KeyParser
 
     private static KeyData ExportRsaKey(DbCryptoKeyMaterial dbKey, bool @private)
     {
+        if (dbKey.PrivateKey is null && @private)
+            return default;
+
         using var rsa = RSA.Create();
-        rsa.ImportRSAPrivateKey(dbKey.PrivateKey, out _);
+
+        if (dbKey.PrivateKey is null)
+            rsa.ImportRSAPublicKey(dbKey.PublicKey, out _);
+        else
+            rsa.ImportRSAPrivateKey(dbKey.PrivateKey, out _);
 
         var pem = @private
             ? rsa.ExportRSAPrivateKeyPem()
@@ -116,8 +123,15 @@ public static class KeyParser
 
     private static KeyData ExportEcdsaKey(DbCryptoKeyMaterial dbKey, bool @private)
     {
+        if (dbKey.PrivateKey is null && @private)
+            return default;
+
         using var ecdsa = ECDsa.Create();
-        ecdsa.ImportECPrivateKey(dbKey.PrivateKey, out _);
+
+        if (dbKey.PrivateKey is null)
+            ecdsa.ImportSubjectPublicKeyInfo(dbKey.PublicKey, out _);
+        else
+            ecdsa.ImportECPrivateKey(dbKey.PrivateKey, out _);
 
         var pem = @private
             ? ecdsa.ExportECPrivateKeyPem()

@@ -7,6 +7,7 @@ using HackYeah.Backend.Keystore.Data;
 using HackYeah.Backend.Keystore.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 
 namespace HackYeah.Backend.Keystore.Controllers;
@@ -14,8 +15,8 @@ namespace HackYeah.Backend.Keystore.Controllers;
 [ApiController, Route("/v1/keys")]
 public sealed class KeysController : ControllerBase
 {
-    private readonly CryptoKeyRepository _repo;
     private readonly ILogger<KeysController> _logger;
+    private readonly CryptoKeyRepository _repo;
 
     public KeysController(ILoggerFactory loggerFactory, CryptoKeyRepository repo)
     {
@@ -25,24 +26,24 @@ public sealed class KeysController : ControllerBase
 
     [HttpPost, Route(""), Consumes("multipart/form-data")]
     public async Task<ActionResult<CryptoKey>> AddKeyAsync(
-        [FromForm(Name = "name")] string keyName,
-        [FromForm(Name = "size")] uint keySize,
-        [FromForm(Name = "type")] KeyType keyType,
-        [FromForm(Name = "data")] IFormFile keyMaterial,
+        [BindRequired, FromForm(Name = "name")] string keyName,
+        [BindRequired, FromForm(Name = "size")] uint keySize,
+        [BindRequired, FromForm(Name = "type")] KeyType keyType,
+        [BindRequired, FromForm(Name = "data")] IFormFile keyMaterial,
         CancellationToken cancellationToken = default)
     {
         try
         {
             using var stream = keyMaterial.OpenReadStream();
             var cryptoKey = await this._repo.AddKeyAsync(
-            id: Guid.NewGuid(),
-            name: keyName,
-            type: keyType,
-            size: keySize,
-            material: stream,
-            cancellationToken);
+                id: Guid.NewGuid(),
+                name: keyName,
+                type: keyType,
+                size: keySize,
+                material: stream,
+                cancellationToken);
 
-            if (cryptoKey.Name is null)
+            if (cryptoKey is null)
                 return this.BadRequest();
 
             return this.Ok(cryptoKey);

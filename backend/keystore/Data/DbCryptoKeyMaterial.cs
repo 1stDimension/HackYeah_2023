@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HackYeah.Backend.Keystore.Crypto;
 
 namespace HackYeah.Backend.Keystore.Data;
@@ -16,4 +17,6 @@ public sealed class DbCryptoKeyMaterial
     public byte[] PrivateKey { get; set; }
 
     public byte[] PublicKey { get; set; }
+
+    public IEnumerable<DbCertificate> Certificates { get; set; }
 }
