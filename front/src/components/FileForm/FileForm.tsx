@@ -4,8 +4,8 @@ import { ChooseFile } from "./components/ChooseFile";
 import { useState } from "react";
 import { SelectForm } from "../SelectForm";
 
-export const FileForm = () => {
-  const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
+export const FileForm = ({ actionType }: { actionType: string }) => {
+  // const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
   // TODO - get those from server
   const cryptoKeys = [
     "aaa",
@@ -16,28 +16,23 @@ export const FileForm = () => {
   ];
 
   type formDataType = {
-    actionType: string;
     keyType: string;
     file?: File;
   };
   type formErrorsType = {
-    actionType: boolean;
     keyType: boolean;
     file: boolean;
   };
 
   const errorsMessages = {
-    actionType: "Proszę wybrać metodę",
     keyType: "Proszę wybrać klucz z dostępnych w key_store",
     file: "Proszę załączyć poprawny plik",
   };
   const [errors, setErrors] = useState<formErrorsType>({
-    actionType: false,
     keyType: false,
     file: false,
   });
   const [formData, setFormData] = useState<formDataType>({
-    actionType: "",
     keyType: "",
     file: undefined,
   });
@@ -66,6 +61,7 @@ export const FileForm = () => {
     if (Object.entries(errors).some((error) => error[0])) return;
 
     // API
+    // formData + actionType
   };
 
   return (
@@ -80,7 +76,7 @@ export const FileForm = () => {
             fullWidth
             errorMessage={errors.file ? errorsMessages.file : undefined}
           />
-          <ChooseAction
+          {/* <ChooseAction
             handleOptionChange={handleInputChange}
             name="actionType"
             keys={keys}
@@ -89,7 +85,7 @@ export const FileForm = () => {
             errorMessage={
               errors.actionType ? errorsMessages.actionType : undefined
             }
-          />
+          /> */}
           <SelectForm
             inputLabel="Wybierz swój klucz z key_store"
             handleChange={handleInputChange}
@@ -102,7 +98,7 @@ export const FileForm = () => {
         </FormGroup>
         <FormGroup>
           <Button variant="contained" color="primary" type="submit">
-            {formData.actionType || "Wykonaj"}
+            {actionType || "Wykonaj"}
           </Button>
         </FormGroup>
       </FormControl>
