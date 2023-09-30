@@ -8,6 +8,7 @@ namespace HackYeah.Backend.Keystore.Services;
 public sealed class KeystoreContext : DbContext
 {
     public DbSet<DbCryptoKeyMaterial> KeyMaterial { get; set; }
+    public DbSet<DbCertificate> Certificates { get; set; }
 
     private readonly string _connStr;
 

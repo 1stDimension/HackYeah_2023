@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,54 @@ public static class KeyParser
             KeyType.ECDSA => ExportEcdsaKey(dbKey, @private),
             _ => ExportInvalidKey()
         };
+    }
+
+    public static async Task<X509Certificate2> LoadCertificateAsync(Stream input, CancellationToken cancellationToken)
+    {
+        var pem = "";
+        using (var sr = new StreamReader(input, Encoding.UTF8))
+            pem = await sr.ReadToEndAsync(cancellationToken);
+
+        var cert = pem.Contains("PRIVATE KEY")
+            ? X509Certificate2.CreateFromPem(pem, pem)
+            : X509Certificate2.CreateFromPem(pem);
+
+        return cert;
+    }
+
+    public static KeyPair ExtractKeyPair(X509Certificate2 cert, out KeyType type, out uint size)
+    {
+        type = KeyType.Unknown;
+        size = 0;
+
+        var kalg = new Oid(cert.GetKeyAlgorithm()).FriendlyName;
+        if (kalg == "RSA")
+        {
+            type = KeyType.RSA;
+            size = (uint)cert.GetRSAPublicKey().KeySize;
+
+            using var rsa = cert.HasPrivateKey
+                ? cert.GetRSAPrivateKey()
+                : cert.GetRSAPublicKey();
+
+            return new(cert.HasPrivateKey ? rsa.ExportRSAPrivateKey() : null, rsa.ExportRSAPublicKey());
+        }
+        else if (kalg == "ECC")
+        {
+            if (!cert.SignatureAlgorithm.FriendlyName.EndsWith("ECDSA"))
+                return default;
+
+            type = KeyType.ECDSA;
+            size = (uint)cert.GetECDsaPublicKey().KeySize;
+
+            using var ecdsa = cert.HasPrivateKey
+                ? cert.GetECDsaPrivateKey()
+                : cert.GetECDsaPublicKey();
+
+            return new(cert.HasPrivateKey ? ecdsa.ExportECPrivateKey() : null, ecdsa.ExportSubjectPublicKeyInfo());
+        }
+        else
+            return default;
     }
 
     private static Task<KeyPair> ParseInvalidKey()

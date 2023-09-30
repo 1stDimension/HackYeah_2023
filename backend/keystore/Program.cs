@@ -26,7 +26,8 @@ public class Program
 
         builder.Services.AddDbContext<KeystoreContext>(ServiceLifetime.Singleton);
 
-        builder.Services.AddTransient<CryptoKeyRepository>();
+        builder.Services.AddTransient<CryptoKeyRepository>()
+            .AddTransient<CertificateRepository>();
 
         builder.Services.AddHostedService<InitializerHostedService>();
 
