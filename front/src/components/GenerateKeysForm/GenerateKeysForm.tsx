@@ -144,7 +144,7 @@ export const GenerateKeysForm = () => {
                 type="submit"
                 sx={{ my: 2 }}
               >
-                Utwórz klucze
+                Generate keys
               </Button>
             </FormGroup>
           </FormControl>
