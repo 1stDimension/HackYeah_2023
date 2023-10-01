@@ -17,7 +17,9 @@ services:
       tags:
         - "hackyeah-key_generator:latest"
     ports:
-      - 8000
+      - 8001:80
+    environment:
+      - KEYSTORE_URL = "http://keystore:80/v1/keys"
   sign:
     build:
       context: ./sign
@@ -31,6 +33,9 @@ services:
   #  build:
   #    context: ./backend/asymm-crypto
   keystore:
+    environment:
+    - LOGGING__LOGLEVEL__DEFAULT=Trace
+    - HACKYEAH__LOGSENSITIVE=true
     build: 
       context: ./backend/keystore
       tags:
@@ -39,5 +44,14 @@ services:
       - hackyeah-keystore:/data
     ports:
       - 5000:80
+  backend-asymm-crypto:
+    environment:
+    - LOGGING__LOGLEVEL__DEFAULT=Trace
+    - HACKYEAH__KEYSTORE=http://keystore:80/
+    - HACKYEAH__TAG=ZW16aTA3NjctaGFja3llYWg=
+    image: hackyeah-asymm-crypto:latest
+    build: ./backend/asymm-crypto
+    ports:
+    - 5001:80
 volumes:
   hackyeah-keystore:
