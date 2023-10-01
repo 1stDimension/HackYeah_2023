@@ -34,6 +34,8 @@ public sealed class KeysController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("ADD KEY: '{0}' {1} {2}-bit", keyName, keyType, keySize);
+
             using var stream = keyMaterial.OpenReadStream();
             var cryptoKey = await this._repo.AddKeyAsync(
                 id: Guid.NewGuid(),
@@ -60,6 +62,7 @@ public sealed class KeysController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("ENUMERATE KEYS");
             return this.Ok(await this._repo.GetKeysAsync(cancellationToken));
         }
         catch (Exception ex)
@@ -74,6 +77,7 @@ public sealed class KeysController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("GET KEY: {0}", id);
             var key = await this._repo.GetKeyAsync(id, cancellationToken);
             if (key.Name is null)
                 return this.NotFound();
@@ -92,6 +96,7 @@ public sealed class KeysController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("GET KEY/PUB: {0}", id);
             var key = await this._repo.GetAsymmetricKeyAsync(id, false, cancellationToken);
             if (key.Name is null)
                 return this.NotFound();
@@ -110,6 +115,7 @@ public sealed class KeysController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("GET KEY/PRIV: {0}", id);
             var key = await this._repo.GetAsymmetricKeyAsync(id, true, cancellationToken);
             if (key.Name is null)
                 return this.NotFound();

@@ -8,6 +8,12 @@ docker run -dit -v hackyeah-keystore:/data -p 5000:80 hackyeah-keystore:latest
 
 This makes the keystore available at http://localhost:5000/
 
+If you want to increase logging verbosity, run this instead:
+
+```
+docker run -dit -e LOGGING__LOGLEVEL__DEFAULT=Trace -e HACKYEAH__LOGSENSITIVE=true -v hackyeah-keystore:/data -p 5000:80 hackyeah-keystore:latest
+```
+
 ## Endpoints
 ### `POST /v1/keys`
 **Content type**: multipart/form-data

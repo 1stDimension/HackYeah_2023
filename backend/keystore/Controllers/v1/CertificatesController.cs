@@ -29,6 +29,7 @@ public sealed class CertificatesController : ControllerBase
     {
         try
         {
+            this._logger.LogTrace("ADD CERT");
             using var stream = certificateFile.OpenReadStream();
             var cryptoCert = await this._repo.AddCertificateAsync(Guid.NewGuid(), stream, cancellationToken);
 

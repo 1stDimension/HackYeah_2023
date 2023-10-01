@@ -11,6 +11,7 @@ public sealed class KeystoreContext : DbContext
     public DbSet<DbCertificate> Certificates { get; set; }
 
     private readonly string _connStr;
+    private readonly bool _sensitive;
 
     public KeystoreContext(IOptions<Config> config)
     {
@@ -20,6 +21,8 @@ public sealed class KeystoreContext : DbContext
         };
 
         this._connStr = csb.ConnectionString;
+
+        this._sensitive = config.Value.LogSensitive;
     }
 
     internal KeystoreContext()
@@ -33,7 +36,8 @@ public sealed class KeystoreContext : DbContext
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlite(this._connStr);
+        => optionsBuilder.UseSqlite(this._connStr)
+            .EnableSensitiveDataLogging(this._sensitive);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
