@@ -28,6 +28,12 @@ export const ChooseFile = ({
       // TODO: work on types
       onChange={handleFileInput as any}
       error={!!errorMessage}
+      InputProps={{
+        style: {
+          height: "150px",
+          borderStyle: "dashed",
+        },
+      }}
     />
     <ErrorMessage message={errorMessage} />
   </Box>

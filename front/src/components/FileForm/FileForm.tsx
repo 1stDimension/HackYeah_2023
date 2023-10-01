@@ -1,8 +1,15 @@
-import { Button, FormControl, FormGroup } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { ChooseAction } from "./components/ChooseAction";
 import { ChooseFile } from "./components/ChooseFile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectForm } from "../SelectForm";
+import Image from "next/image";
 
 export const FileForm = ({ actionType }: { actionType: string }) => {
   // const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
@@ -45,6 +52,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     setFormData({ ...formData, file: file });
   };
 
+  useEffect(() => {}, [errors]);
   // TODO: create dynamic <T> event type
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -68,39 +76,56 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     <form onSubmit={handleSubmit}>
       {/* <Container maxWidth="md" sx={{ mt: 10 }}> */}
       <FormControl fullWidth>
-        <FormGroup>
-          <ChooseFile
-            handleFileInput={handleFileInput}
-            name="file"
-            value={formData.file}
-            fullWidth
-            errorMessage={errors.file ? errorsMessages.file : undefined}
-          />
-          {/* <ChooseAction
-            handleOptionChange={handleInputChange}
-            name="actionType"
-            keys={keys}
-            value={formData.actionType}
-            label="Wybierz metodę"
-            errorMessage={
-              errors.actionType ? errorsMessages.actionType : undefined
-            }
-          /> */}
-          <SelectForm
-            inputLabel="Wybierz swój klucz z key_store"
-            handleChange={handleInputChange}
-            name="keyType"
-            options={cryptoKeys}
-            value={formData.keyType}
-            fullWidth
-            errorMessage={errors.keyType ? errorsMessages.keyType : undefined}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Button variant="contained" color="primary" type="submit">
-            {actionType || "Wykonaj"}
-          </Button>
-        </FormGroup>
+        <Grid container spacing={3}>
+          <Grid item xs={4}>
+            <Image
+              src="/FileFormUpload.png"
+              width={132}
+              height={41}
+              alt="Upload file image"
+            />
+            <Typography fontSize={12}>Upload a file for encryption</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <FormGroup>
+              <ChooseFile
+                handleFileInput={handleFileInput}
+                name="file"
+                value={formData.file}
+                fullWidth
+                errorMessage={errors.file ? errorsMessages.file : undefined}
+              />
+            </FormGroup>
+          </Grid>
+          <Grid item xs={4}>
+            <Image
+              src="/FileFormChoose.png"
+              width={158}
+              height={62}
+              alt="Choose key image"
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <FormGroup>
+              <SelectForm
+                inputLabel="Wybierz swój klucz z key_store"
+                handleChange={handleInputChange}
+                name="keyType"
+                options={cryptoKeys}
+                value={formData.keyType}
+                fullWidth
+                errorMessage={
+                  errors.keyType ? errorsMessages.keyType : undefined
+                }
+              />
+            </FormGroup>
+          </Grid>
+          <FormGroup>
+            <Button variant="contained" color="primary" type="submit">
+              {actionType || "Wykonaj"}
+            </Button>
+          </FormGroup>
+        </Grid>
       </FormControl>
     </form>
   );
