@@ -1,4 +1,6 @@
-﻿using HackYeah.Backend.Keystore.Data;
+﻿using System;
+using System.Threading.Tasks;
+using HackYeah.Backend.Keystore.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

@@ -13,4 +13,7 @@ public class CryptoCert
 
     [JsonPropertyName("thumbprint")]
     public string Thumbprint { get; set; }
+
+    [JsonPropertyName("has_key")]
+    public bool HasPrivateKey { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using HackYeah.Backend.Keystore.Data;
@@ -45,15 +46,50 @@ public sealed class CertificatesController : ControllerBase
         }
     }
 
+    [HttpGet, Route("")]
+    public async Task<ActionResult<IEnumerable<CryptoKey>>> GetCertificatesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            this._logger.LogTrace("ENUMERATE CERTS");
+            return this.Ok(await this._repo.GetCertificatesAsync(cancellationToken));
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Exception occured while enumerating certs");
+            return this.BadRequest();
+        }
+    }
+
     [HttpGet, Route("{id}")]
     public async Task<ActionResult> GetCertificateAsync(Guid id, CancellationToken cancellationToken)
     {
-        return this.NotFound();
+        try
+        {
+            this._logger.LogTrace("GET CERT/ID: {0}", id);
+            var cert = await this._repo.GetCertificateAsync(id, cancellationToken);
+            return this.Content(cert, "application/x-pem-file");
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Exception occured while searching cert by id");
+            return this.BadRequest();
+        }
     }
 
-    [HttpGet, Route("{thumbprint}")]
+    [HttpGet, Route("by-thumbprint/{thumbprint}")]
     public async Task<ActionResult> GetCertificateByThumbprintAsync(string thumbprint, CancellationToken cancellationToken)
     {
-        return this.NotFound();
+        try
+        {
+            this._logger.LogTrace("GET CERT/THUMB: {0}", thumbprint);
+            var cert = await this._repo.GetCertificateAsync(thumbprint, cancellationToken);
+            return this.Content(cert, "application/x-pem-file");
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Exception occured while searching cert by thumb");
+            return this.BadRequest();
+        }
     }
 }
