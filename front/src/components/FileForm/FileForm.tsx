@@ -5,7 +5,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { ChooseAction } from "./components/ChooseAction";
 import { ChooseFile } from "./components/ChooseFile";
 import { useEffect, useState } from "react";
 import { SelectForm } from "../SelectForm";
@@ -52,7 +51,6 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     setFormData({ ...formData, file: file });
   };
 
-  useEffect(() => {}, [errors]);
   // TODO: create dynamic <T> event type
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -64,7 +62,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
       // @ts-ignore
       else tmpError[name] = false;
     });
-    setErrors(tmpError);
+    setErrors((prevErrors) => ({ ...prevErrors, ...tmpError }));
 
     if (Object.entries(errors).some((error) => error[0])) return;
 
@@ -74,9 +72,8 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <Container maxWidth="md" sx={{ mt: 10 }}> */}
       <FormControl fullWidth>
-        <Grid container spacing={3}>
+        <Grid container columnSpacing={3} rowSpacing={5}>
           <Grid item xs={4}>
             <Image
               src="/FileFormUpload.png"
@@ -108,7 +105,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
           <Grid item xs={8}>
             <FormGroup>
               <SelectForm
-                inputLabel="Choose your key key_store"
+                inputLabel="Choose your key_store"
                 handleChange={handleInputChange}
                 name="keyType"
                 options={cryptoKeys}
@@ -120,12 +117,17 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
               />
             </FormGroup>
           </Grid>
-          <FormGroup>
-            <Button variant="contained" color="primary" type="submit">
-              {actionType || "Operate"}
-            </Button>
-          </FormGroup>
         </Grid>
+        <FormGroup>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ my: 2 }}
+          >
+            {actionType || "Operate"}
+          </Button>
+        </FormGroup>
       </FormControl>
     </form>
   );

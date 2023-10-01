@@ -2,9 +2,10 @@ import { ResponseModal } from "@/components/ResponseModal";
 import { SelectForm } from "@/components/SelectForm";
 import { TextFieldForm } from "@/components/TextFieldForm";
 import { postKeyParams } from "@/services/keyGenerator";
-import { Box, Button, FormControl, FormGroup, Typography } from "@mui/material";
+import { Box, Button, FormControl, FormGroup, Grid } from "@mui/material";
 import { AxiosResponse } from "axios";
 import { useState } from "react";
+import Image from "next/image";
 
 export const GenerateKeysForm = () => {
   // TODO - get options from this form
@@ -67,43 +68,82 @@ export const GenerateKeysForm = () => {
         <ResponseModal response={response} />
       ) : (
         <form onSubmit={handleSubmit}>
-          <FormControl
-            sx={{ display: "block", maxWidth: "sm", margin: "auto" }}
-          >
-            <TextFieldForm
-              name="keyName"
-              inputLabel="Nazwa klucza"
-              handleInputChange={handleInputChange}
-              value={formData.keyName}
-              helperLabel="Wprowadź nazwę klucza generowanego do key_store"
-              errorMessage={errors.keyName ? errorsMessages.keyName : undefined}
-            />
-            <SelectForm
-              inputLabel="typ algorytmu"
-              name="alghoritmType"
-              options={Object.keys(options)}
-              handleChange={handleInputChange}
-              value={formData.alghoritmType}
-              fullWidth
-              errorMessage={
-                errors.alghoritmType ? errorsMessages.alghoritmType : undefined
-              }
-            />
-            {Object.keys(options).includes(formData.alghoritmType) && (
-              <SelectForm
-                inputLabel="długość klucza"
-                name="keyLength"
-                options={options[formData.alghoritmType]}
-                handleChange={handleInputChange}
-                value={formData.keyLength}
-                fullWidth
-                errorMessage={
-                  errors.keyLength ? errorsMessages.keyLength : undefined
-                }
-              />
-            )}
+          <FormControl sx={{ display: "block" }}>
+            <Grid container columnSpacing={3} rowSpacing={5}>
+              <Grid item xs={4}>
+                <Image
+                  src="/keyFormName.png"
+                  width={130}
+                  height={41}
+                  alt="Upload file image"
+                />
+              </Grid>
+              <Grid item xs={8}>
+                <TextFieldForm
+                  name="keyName"
+                  inputLabel="Nazwa klucza"
+                  handleInputChange={handleInputChange}
+                  value={formData.keyName}
+                  helperLabel="Wprowadź nazwę klucza generowanego do key_store"
+                  errorMessage={
+                    errors.keyName ? errorsMessages.keyName : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Image
+                  src="/keyFormAlghoritm.png"
+                  width={184}
+                  height={41}
+                  alt="Upload file image"
+                />
+              </Grid>
+              <Grid item xs={8}>
+                <SelectForm
+                  inputLabel="typ algorytmu"
+                  name="alghoritmType"
+                  options={Object.keys(options)}
+                  handleChange={handleInputChange}
+                  value={formData.alghoritmType}
+                  fullWidth
+                  errorMessage={
+                    errors.alghoritmType
+                      ? errorsMessages.alghoritmType
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Image
+                  src="/keyFormLength.png"
+                  width={132}
+                  height={41}
+                  alt="Upload file image"
+                />
+              </Grid>
+              <Grid item xs={8}>
+                {Object.keys(options).includes(formData.alghoritmType) && (
+                  <SelectForm
+                    inputLabel="długość klucza"
+                    name="keyLength"
+                    options={options[formData.alghoritmType]}
+                    handleChange={handleInputChange}
+                    value={formData.keyLength}
+                    fullWidth
+                    errorMessage={
+                      errors.keyLength ? errorsMessages.keyLength : undefined
+                    }
+                  />
+                )}
+              </Grid>
+            </Grid>
             <FormGroup>
-              <Button variant="contained" color="primary" type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ my: 2 }}
+              >
                 Utwórz klucze
               </Button>
             </FormGroup>

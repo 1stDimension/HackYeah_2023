@@ -20,7 +20,7 @@ export const ChooseFile = ({
   fullWidth,
   errorMessage,
 }: IChooseFileProps) => (
-  <Box sx={{ display: "block", position: "relative", my: 2 }}>
+  <Box sx={{ display: "block", position: "relative" }}>
     <MuiFileInput
       name={name}
       value={value}
