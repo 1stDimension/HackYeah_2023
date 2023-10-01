@@ -19,18 +19,50 @@ const pages = [
 export const Navbar = () => {
   const router = useRouter();
   const type = router.query.type as string;
+
+  const imgAlt =
+    type === "encrypt"
+      ? "Encrypt logo"
+      : type === "decrypt"
+      ? "Decrypt logo"
+      : type === "sign"
+      ? "Create signature logo"
+      : type === "verify-signature"
+      ? "Verify signature logo"
+      : "Generate keys";
+  const imgPath =
+    type === "encrypt"
+      ? "/EncryptBanner.png"
+      : type === "decrypt"
+      ? "/DecryptBanner.png"
+      : type === "sign"
+      ? "/SignBanner.png"
+      : type === "verify-signature"
+      ? "/VerifyBanner.png"
+      : "/GenerateBanner.png";
   return (
     <AppBar position="static" sx={{ mb: 3, backgroundColor: "white" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Image
-            src={"/BKGlogo.png"}
-            style={{ padding: "12px" }}
-            width={172}
-            height={77}
-            alt="BKG logo"
-          />
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Link href={"/"}>
+            <Image
+              src={"/BKGlogo.png"}
+              style={{ padding: "12px" }}
+              width={172}
+              height={77}
+              alt="BKG logo"
+            />
+          </Link>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "none",
+                md: "flex",
+                justifyContent: "space-around",
+              },
+            }}
+          >
             {pages.map((page, index) => (
               <Link href={page.href} key={page.name + index}>
                 <Button
@@ -48,14 +80,16 @@ export const Navbar = () => {
           </Box>
         </Toolbar>
       </Container>
-      <Image
-        alt="Encrypt logo"
-        width={0}
-        height={0}
-        sizes="100vw"
-        style={{ width: "100vw", height: "auto", margin: "auto" }}
-        src="/EncryptBaner.png"
-      />
+      {imgPath && (
+        <Image
+          alt={imgAlt}
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: "100vw", height: "auto", margin: "auto" }}
+          src={imgPath}
+        />
+      )}
     </AppBar>
   );
 };

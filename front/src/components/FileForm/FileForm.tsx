@@ -108,7 +108,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
           <Grid item xs={8}>
             <FormGroup>
               <SelectForm
-                inputLabel="Wybierz swój klucz z key_store"
+                inputLabel="Choose your key key_store"
                 handleChange={handleInputChange}
                 name="keyType"
                 options={cryptoKeys}
@@ -122,7 +122,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
           </Grid>
           <FormGroup>
             <Button variant="contained" color="primary" type="submit">
-              {actionType || "Wykonaj"}
+              {actionType || "Operate"}
             </Button>
           </FormGroup>
         </Grid>
