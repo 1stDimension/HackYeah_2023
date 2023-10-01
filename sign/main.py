@@ -62,12 +62,14 @@ def get_key(uid: UUID) -> Key:
             'type': 'priv'
         }
     )
-    json = resp.json
+    json = resp.json()
     key = Key(
         uid,
         json["name"],
-        Key_type(str(json["type"]).upper())
-        ).fr
+        Key_type(str(json["type"]).upper()),
+        int(json["size"]),
+        
+        )
     return key
 
 @app.post("v1/sign/")
@@ -86,7 +88,6 @@ def sign_file(
             # TODO: get CRT
             # TODO: get KEY
             key = get_key(key_id)
-            # TODO: timestamper
             signer = signers.SimpleSigner.load
             timestamper = timestamps.HTTPTimeStamper(
                 url='https://freetsa.org/tsr'
