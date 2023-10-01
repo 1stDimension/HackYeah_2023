@@ -18,6 +18,8 @@ services:
         - "hackyeah-key_generator:latest"
     ports:
       - 8000
+    environment:
+      - KEYSTORE_URL = "http://keystore:80/v1/keys"
   sign:
     build:
       context: ./sign
