@@ -4,8 +4,7 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN cd src/
-
-CMD [ "uvicorn", "main:app --reload" ]
+WORKDIR /usr/src/app/src
+CMD [ "uvicorn", "main:app", "--reload" ]
 
 EXPOSE 8000

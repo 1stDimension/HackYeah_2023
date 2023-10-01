@@ -7,6 +7,10 @@ services:
      - NGINX_PORT=80
     volumes:
       - ./gateway/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      -  keystore
+      - generate_key
+      - sign
   generate_key:
     build:
       context: ./key_generator_service
