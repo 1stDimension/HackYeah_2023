@@ -9,17 +9,27 @@ import { ChooseFile } from "./components/ChooseFile";
 import { useEffect, useState } from "react";
 import { SelectForm } from "../SelectForm";
 import Image from "next/image";
+import axios from "axios";
 
 export const FileForm = ({ actionType }: { actionType: string }) => {
-  // const keys = ["Szyfruj", "Deszyfruj", "Podpisz", "Zweryfikuj podpis"];
-  // TODO - get those from server
-  const cryptoKeys = [
-    "aaa",
-    "Szyfruj",
-    "Deszyfruj",
-    "Podpisz",
-    "Zweryfikuj podpis",
-  ];
+  const [cryptoKeys, setCryptoKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const setKeys = async () => {
+      if (
+        !process.env.NEXT_PUBLIC_KEY_STORE_HOST ||
+        !process.env.NEXT_PUBLIC_KEY_STORE_PORT
+      )
+        return;
+
+      const resp = await axios.get(
+        process.env.NEXT_PUBLIC_KEY_STORE_HOST +
+          process.env.NEXT_PUBLIC_KEY_STORE_PORT
+      );
+      setCryptoKeys(resp.data);
+    };
+    setKeys();
+  }, []);
 
   type formDataType = {
     keyType: string;
@@ -69,6 +79,8 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     // API
     // formData + actionType
   };
+
+  if (cryptoKeys.length === 0) return;
 
   return (
     <form onSubmit={handleSubmit}>

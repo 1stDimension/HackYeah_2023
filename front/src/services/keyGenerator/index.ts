@@ -11,5 +11,9 @@ export const postKeyParams = async ({
     key_type: alghoritmType,
     key_size: keyLength,
   };
-  return await axios.post("url", body);
+  if (process.env.NEXT_PUBLIC_GEN_KEY_ENDPOINT)
+    return await axios.post(
+      process.env.NEXT_PUBLIC_GEN_KEY_ENDPOINT,
+      JSON.stringify(body)
+    );
 };
