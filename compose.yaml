@@ -10,7 +10,6 @@ services:
   generate_key:
     build:
       context: ./key_generator_service
-      dockerfile: ../sign/Dockerfile
       tags:
         - "hackyeah-key_generator:latest"
     ports:
