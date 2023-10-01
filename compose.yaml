@@ -7,6 +7,14 @@ services:
      - NGINX_PORT=80
     volumes:
       - ./gateway/nginx.conf:/etc/nginx/nginx.conf
+  generate_key:
+    build:
+      context: ./key_generator_service
+      dockerfile: ../sign/Dockerfile
+      tags:
+        - "hackyeah-key_generator:latest"
+    ports:
+      - 8000
   sign:
     build:
       context: ./sign
