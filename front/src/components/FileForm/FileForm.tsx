@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   FormGroup,
@@ -9,10 +10,13 @@ import { ChooseFile } from "./components/ChooseFile";
 import { useEffect, useState } from "react";
 import { SelectForm } from "../SelectForm";
 import Image from "next/image";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { ResponseModal } from "../ResponseModal";
+import { redirect } from "next/navigation";
 
 export const FileForm = ({ actionType }: { actionType: string }) => {
   const [cryptoKeys, setCryptoKeys] = useState<string[]>([]);
+  const [response, setResponse] = useState<AxiosResponse<any, any>>();
 
   useEffect(() => {
     const setKeys = async () => {
@@ -62,7 +66,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
   };
 
   // TODO: create dynamic <T> event type
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const tmpError = errors;
     Object.entries(formData).forEach((entry) => {
@@ -78,69 +82,89 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
 
     // API
     // formData + actionType
+    if (!process.env.NEXT_PUBLIC_V1) return;
+
+    const body = {
+      ...formData,
+    };
+    setResponse(
+      await axios.post(
+        process.env.NEXT_PUBLIC_V1 + "/" + actionType,
+        JSON.stringify(body)
+      )
+    );
   };
 
   if (cryptoKeys.length === 0) return;
 
+  if (response)
+    redirect(
+      "/success?succesMessage=Your%20eSignature%20has%20been%20verified%20successfully!"
+    );
+
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl fullWidth>
-        <Grid container columnSpacing={3} rowSpacing={5}>
-          <Grid item xs={4}>
-            <Image
-              src="/FileFormUpload.png"
-              width={132}
-              height={41}
-              alt="Upload file image"
-            />
-            <Typography fontSize={12}>Upload a file for encryption</Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <FormGroup>
-              <ChooseFile
-                handleFileInput={handleFileInput}
-                name="file"
-                value={formData.file}
-                fullWidth
-                errorMessage={errors.file ? errorsMessages.file : undefined}
+    <Box>
+      <form onSubmit={handleSubmit}>
+        <FormControl fullWidth>
+          <Grid container columnSpacing={3} rowSpacing={5}>
+            <Grid item xs={4}>
+              <Image
+                src="/FileFormUpload.png"
+                width={132}
+                height={41}
+                alt="Upload file image"
               />
-            </FormGroup>
-          </Grid>
-          <Grid item xs={4}>
-            <Image
-              src="/FileFormChoose.png"
-              width={158}
-              height={62}
-              alt="Choose key image"
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <FormGroup>
-              <SelectForm
-                inputLabel="Choose your key_store"
-                handleChange={handleInputChange}
-                name="keyType"
-                options={cryptoKeys}
-                value={formData.keyType}
-                fullWidth
-                errorMessage={
-                  errors.keyType ? errorsMessages.keyType : undefined
-                }
+              <Typography fontSize={12}>
+                Upload a file for encryption
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <FormGroup>
+                <ChooseFile
+                  handleFileInput={handleFileInput}
+                  name="file"
+                  value={formData.file}
+                  fullWidth
+                  errorMessage={errors.file ? errorsMessages.file : undefined}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={4}>
+              <Image
+                src="/FileFormChoose.png"
+                width={158}
+                height={62}
+                alt="Choose key image"
               />
-            </FormGroup>
+            </Grid>
+            <Grid item xs={8}>
+              <FormGroup>
+                <SelectForm
+                  inputLabel="Choose your key_store"
+                  handleChange={handleInputChange}
+                  name="keyType"
+                  options={cryptoKeys}
+                  value={formData.keyType}
+                  fullWidth
+                  errorMessage={
+                    errors.keyType ? errorsMessages.keyType : undefined
+                  }
+                />
+              </FormGroup>
+            </Grid>
           </Grid>
-        </Grid>
-        <FormGroup>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            sx={{ my: 2 }}
-          >
-            {actionType || "Operate"}
-          </Button>
-        </FormGroup>
-      </FormControl>
-    </form>
+          <FormGroup>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{ my: 2 }}
+            >
+              {actionType || "Operate"}
+            </Button>
+          </FormGroup>
+        </FormControl>
+      </form>
+    </Box>
   );
 };
