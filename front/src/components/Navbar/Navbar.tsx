@@ -13,7 +13,7 @@ const pages = [
   { name: "Decrypt files", href: "/?type=decrypt" },
   { name: "create eSignature", href: "/?type=sign" },
   { name: "Verify eSignature", href: "/?type=verify-signature" },
-  { name: "Generacja kluczy", href: "/generate-keys" },
+  { name: "Generate keys", href: "/generate-keys" },
 ];
 
 export const Navbar = () => {
@@ -46,11 +46,11 @@ export const Navbar = () => {
         <Toolbar disableGutters>
           <Link href={"/"}>
             <Image
-              src={"/BKGlogo.png"}
+              src={"/BGKlogo.png"}
               style={{ padding: "12px" }}
               width={172}
               height={77}
-              alt="BKG logo"
+              alt="BGK logo"
             />
           </Link>
           <Box
