@@ -79,3 +79,42 @@ JSON:
 `type`    | `str`    | Type of the key (`AES`/`RSA`/`ECDSA`)
 `size`    | `uint`   | Bit-size of the key
 `data`    | `str`    | PEM data for asymmetric keys, base64-encoded binary data for symmetric keys
+
+### `POST /v1/certficates`
+**Content type**: multipart/form-data
+**field** | **type** | **comment**
+----------|----------|------------
+`data`    | file     | Data containing the certificate encoded in PEM; Can have private key appended as PEM data
+
+#### Returns
+JSON:  
+**field**    | **type** | **description**
+-------------|----------|----------------
+`id`         | `str`    | ID of the created key
+`cn`         | `str`    | Common name of the certificate
+`thumbprint` | `str`    | Thumbprint of the certificate
+`has_key`    | `bool`   | Whether the certificate has a private key associated with it
+
+### `GET /v1/certificates`
+Returns an array containing all defined certificates
+
+#### Returns
+JSON array of:  
+**field**    | **type** | **description**
+-------------|----------|----------------
+`id`         | `str`    | ID of the created key
+`cn`         | `str`    | Common name of the certificate
+`thumbprint` | `str`    | Thumbprint of the certificate
+`has_key`    | `bool`   | Whether the certificate has a private key associated with it
+
+### `GET /v1/certificates/:id`
+Returns a PEM-encoded certificate, with private key if applicable
+
+#### Returns
+PEM bundle
+
+### `GET /v1/certificates/by-thumbprint/:thumbprint`
+Returns a PEM-encoded certificate, with private key if applicable
+
+#### Returns
+PEM bundle

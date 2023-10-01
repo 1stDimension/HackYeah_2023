@@ -1,0 +1,31 @@
+services:
+  backend-keystore:
+    environment:
+    - LOGGING__LOGLEVEL__DEFAULT=Trace
+    - HACKYEAH__LOGSENSITIVE=true
+    volumes:
+    - backend-keystore:/data
+    image: hackyeah-keystore:latest
+    build: ./keystore
+    ports:
+    - 5000:80
+    networks:
+    - backend-net
+  
+  backend-asymm-crypto:
+    environment:
+    - LOGGING__LOGLEVEL__DEFAULT=Trace
+    - HACKYEAH__KEYSTORE=http://backend-keystore:80/
+    - HACKYEAH__TAG=ZW16aTA3NjctaGFja3llYWg=
+    image: hackyeah-asymm-crypto:latest
+    build: ./asymm-crypto
+    ports:
+    - 5001:80
+    networks:
+    - backend-net
+
+networks:
+  backend-net:
+
+volumes:
+  backend-keystore:
