@@ -27,6 +27,8 @@ services:
         - "hackyeah-sign:latest"
     ports:
       - 8000:80
+    environment:
+     - KEYSTORE_URL = "http://keystore"
   #backend/asym-crypto:
   #  build:
   #    context: ./backend/asymm-crypto

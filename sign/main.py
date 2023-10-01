@@ -68,7 +68,7 @@ def get_key(uid: UUID) -> Key:
         json["name"],
         Key_type(str(json["type"]).upper()),
         int(json["size"]),
-        
+        json["data"]
         )
     return key
 
