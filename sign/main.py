@@ -66,8 +66,10 @@ def get_key(uid: UUID) -> Key:
     key = Key(
         uid,
         json["name"],
-        Key_type(str(json["type"]).upper())
-        ).fr
+        Key_type(str(json["type"]).upper()),
+        int(json["size"]),
+        json["data"]
+        )
     return key
 
 @app.post("v1/sign/")
