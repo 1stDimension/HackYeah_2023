@@ -9,7 +9,11 @@ import Image from "next/image";
 
 export const GenerateKeysForm = () => {
   // TODO - get options from this form
-  const options = { RSA: [2048, 4096], ECDSA: [512], AES: [128] };
+  const options = {
+    RSA: [2048, 3072, 4096],
+    ECDSA: [256, 384, 521],
+    AES: [128, 192, 256],
+  };
 
   type formDataType = {
     keyName: string;
@@ -26,7 +30,7 @@ export const GenerateKeysForm = () => {
   const [formData, setFormData] = useState<formDataType>({
     keyName: "",
     alghoritmType: Object.keys(options)[0] as keyof typeof options,
-    keyLength: 0,
+    keyLength: 2048,
   });
 
   const errorsMessages = {
@@ -57,7 +61,8 @@ export const GenerateKeysForm = () => {
     });
     setErrors(tmpError);
 
-    if (Object.entries(errors).some((error) => error[0])) return;
+    // console.log(errors);
+    // if (Object.entries(errors).some((error) => error[0])) return;
 
     setResponse(await postKeyParams(formData));
   };

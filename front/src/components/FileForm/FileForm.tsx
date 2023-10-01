@@ -11,25 +11,19 @@ import { useEffect, useState } from "react";
 import { SelectForm } from "../SelectForm";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
-import { ResponseModal } from "../ResponseModal";
 import { redirect } from "next/navigation";
 
 export const FileForm = ({ actionType }: { actionType: string }) => {
-  const [cryptoKeys, setCryptoKeys] = useState<string[]>([]);
+  const [cryptoKeys, setCryptoKeys] = useState<{ id: string; name: string }[]>(
+    []
+  );
   const [response, setResponse] = useState<AxiosResponse<any, any>>();
 
   useEffect(() => {
     const setKeys = async () => {
-      if (
-        !process.env.NEXT_PUBLIC_KEY_STORE_HOST ||
-        !process.env.NEXT_PUBLIC_KEY_STORE_PORT
-      )
-        return;
+      if (!process.env.NEXT_PUBLIC_V1) return;
 
-      const resp = await axios.get(
-        process.env.NEXT_PUBLIC_KEY_STORE_HOST +
-          process.env.NEXT_PUBLIC_KEY_STORE_PORT
-      );
+      const resp = await axios.get(process.env.NEXT_PUBLIC_V1 + "/keys");
       setCryptoKeys(resp.data);
     };
     setKeys();
@@ -78,7 +72,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     });
     setErrors((prevErrors) => ({ ...prevErrors, ...tmpError }));
 
-    if (Object.entries(errors).some((error) => error[0])) return;
+    // if (Object.entries(errors).some((error) => error[0])) return;
 
     // API
     // formData + actionType
@@ -87,20 +81,47 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
     const body = {
       ...formData,
     };
-    setResponse(
-      await axios.post(
-        process.env.NEXT_PUBLIC_V1 + "/" + actionType,
-        JSON.stringify(body)
-      )
-    );
+
+    const formdata = new FormData();
+    formdata.append("key", formData.keyType);
+    // @ts-ignore
+    formdata.append("file", formData.file);
+    console.log(formdata);
+    // setResponse(
+    axios
+      .post(process.env.NEXT_PUBLIC_V1 + "/" + actionType, formdata, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        // create file link in browser's memory
+        const href = URL.createObjectURL(response.data);
+
+        // create "a" HTML element with href to file & click
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute(
+          "download",
+          response.headers["content-disposition"]
+            .split(";")[1]
+            .split("=")[1]
+            .replace('"', "")
+        ); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      });
+    // );
   };
 
   if (cryptoKeys.length === 0) return;
 
-  if (response)
-    redirect(
-      "/success?succesMessage=Your%20eSignature%20has%20been%20verified%20successfully!"
-    );
+  // if (response)
+  // redirect(
+  //   "/success?succesMessage=Your%20eSignature%20has%20been%20verified%20successfully!"
+  // );
 
   return (
     <Box>
@@ -143,7 +164,7 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
                   inputLabel="Choose your key_store"
                   handleChange={handleInputChange}
                   name="keyType"
-                  options={cryptoKeys}
+                  options={cryptoKeys.map((key) => key.id)}
                   value={formData.keyType}
                   fullWidth
                   errorMessage={

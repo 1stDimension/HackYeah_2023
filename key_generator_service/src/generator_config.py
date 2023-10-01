@@ -10,6 +10,6 @@ class Settings(BaseSettings):
     ECDSA_MAX: int = 192
     ECDSA_MIN: int = 521
 
-    KEYSTORE_URL: str = "http://localhost:5000/v1/keys"
+    KEYSTORE_URL: str = "http://keystore:80/v1/keys"
 
 settings = Settings()

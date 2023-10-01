@@ -11,9 +11,6 @@ export const postKeyParams = async ({
     key_type: alghoritmType,
     key_size: keyLength,
   };
-  if (process.env.NEXT_PUBLIC_GEN_KEY_ENDPOINT)
-    return await axios.post(
-      process.env.NEXT_PUBLIC_GEN_KEY_ENDPOINT,
-      JSON.stringify(body)
-    );
+  if (process.env.NEXT_PUBLIC_V1)
+    return await axios.post(process.env.NEXT_PUBLIC_V1 + "/generate_key", body);
 };
