@@ -12,14 +12,14 @@ export const SelectForm = ({
   fullWidth,
   errorMessage,
 }: ISelectFormProps) => (
-  <Box sx={{ my: 2, position: "relative" }}>
+  <Box sx={{ position: "relative" }}>
     <InputLabel id={`select-label-${inputLabel}`}>{inputLabel}</InputLabel>
     <Select
       labelId={`select-label-${inputLabel}`}
       id={`select-${inputLabel}`}
       name={name}
       value={value}
-      label="Age"
+      label={inputLabel}
       onChange={handleChange}
       fullWidth={fullWidth}
       // error

@@ -1,4 +1,10 @@
-import { Box, FormHelperText, Input, InputLabel } from "@mui/material";
+import {
+  Box,
+  FormHelperText,
+  Input,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import { ITextFieldFormProps } from "./models";
 import { ErrorMessage } from "../ErrorMessage";
 
@@ -11,9 +17,9 @@ export const TextFieldForm = ({
   fullWidth,
   errorMessage,
 }: ITextFieldFormProps) => (
-  <Box sx={{ my: 2 }}>
-    <InputLabel htmlFor={`tff-${name}`}>{inputLabel}</InputLabel>
-    <Input
+  <Box>
+    <TextField
+      label={inputLabel}
       name={name}
       value={value}
       onChange={handleInputChange}
