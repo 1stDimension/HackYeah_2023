@@ -84,7 +84,7 @@ export const GenerateKeysForm = () => {
                   inputLabel="Nazwa klucza"
                   handleInputChange={handleInputChange}
                   value={formData.keyName}
-                  helperLabel="Wprowadź nazwę klucza generowanego do key_store"
+                  helperLabel="Key name to key_store"
                   errorMessage={
                     errors.keyName ? errorsMessages.keyName : undefined
                   }
