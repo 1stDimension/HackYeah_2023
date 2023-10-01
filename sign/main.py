@@ -66,7 +66,7 @@ def get_key(uid: UUID) -> Key:
     key = Key(
         uid,
         json["name"],
-        Key_type.rsa
+        Key_type(str(json["type"]).upper())
         ).fr
     return key
 
