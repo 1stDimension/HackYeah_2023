@@ -1,9 +1,11 @@
 using HackYeah.Backend.Keystore.Data;
 using HackYeah.Backend.Keystore.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace HackYeah.Backend.Keystore;
 
@@ -26,7 +28,8 @@ public class Program
 
         builder.Services.AddDbContext<KeystoreContext>(ServiceLifetime.Singleton);
 
-        builder.Services.AddTransient<CryptoKeyRepository>();
+        builder.Services.AddTransient<CryptoKeyRepository>()
+            .AddTransient<CertificateRepository>();
 
         builder.Services.AddHostedService<InitializerHostedService>();
 
