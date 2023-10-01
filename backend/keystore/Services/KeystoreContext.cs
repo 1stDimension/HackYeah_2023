@@ -37,7 +37,8 @@ public sealed class KeystoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite(this._connStr)
-            .EnableSensitiveDataLogging(this._sensitive);
+            .EnableSensitiveDataLogging(this._sensitive)
+            .EnableDetailedErrors(this._sensitive);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
