@@ -1,0 +1,7 @@
+pyHanko
+uvicorn[standard]
+fastapi[all]
+python-multipart
+requests
+xades
+cryptography
