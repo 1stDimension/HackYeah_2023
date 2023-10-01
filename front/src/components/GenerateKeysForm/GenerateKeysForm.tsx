@@ -30,9 +30,9 @@ export const GenerateKeysForm = () => {
   });
 
   const errorsMessages = {
-    keyName: "Proszę wprowadzić nazwę klucza",
-    keyLength: "Proszę wybrać długość klucza",
-    alghoritmType: "Proszę wybrać algorytm",
+    keyName: "Please input key name",
+    keyLength: "Please choose key length",
+    alghoritmType: "Please choose alghoritm type",
   };
   const [errors, setErrors] = useState<formErrorsType>({
     keyName: false,

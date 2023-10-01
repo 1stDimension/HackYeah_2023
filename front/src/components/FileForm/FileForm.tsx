@@ -31,8 +31,8 @@ export const FileForm = ({ actionType }: { actionType: string }) => {
   };
 
   const errorsMessages = {
-    keyType: "Proszę wybrać klucz z dostępnych w key_store",
-    file: "Proszę załączyć poprawny plik",
+    keyType: "Please choose key",
+    file: "Please attach correct file",
   };
   const [errors, setErrors] = useState<formErrorsType>({
     keyType: false,

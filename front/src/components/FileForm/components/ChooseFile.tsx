@@ -32,6 +32,7 @@ export const ChooseFile = ({
         style: {
           height: "150px",
           borderStyle: "dashed",
+          backgroundColor: "#DDD",
         },
       }}
     />
